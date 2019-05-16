@@ -1,5 +1,7 @@
 ## TeraWallet
 
+开发不易 觉得好用 就给 191864(MiaoWoo) 打点币呗!
+
 ### 泰瑞管家源代码
 
 - 小程序码![](README_files/1.jpg)
@@ -43,3 +45,10 @@
   - [ ] 支付宝小程序
   - [ ] Android APP
   - [ ] IOS APP
+- 国际化
+  - [ ] 基本页面国际化
+  - [ ] 标题栏国际化
+  - [ ] TabBar国际化
+  - [ ] 多语言
+	- [ ] Chinese Simple
+	- [ ] English
