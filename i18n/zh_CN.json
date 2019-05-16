@@ -1,0 +1,20 @@
+{
+	"index": {
+		"navigationBarTitle": "泰瑞管家",
+		"tabBarTitle": "首页",
+		"origin": "原始价格",
+		"exchange": "交易所价格",
+		"updateTime": "更新时间"
+	},
+	"my": {
+		"navigationBarTitle": "个人中心",
+		"tabBarTitle": "我的",
+		"wechatLogin": "微信授权登录",
+		"noLogin": "未登录",
+		"title": "账户公钥 (输入后下滑即可查看详情)",
+		"placeholder": "也可输入ID 会自动转换为公钥"
+	},
+	"common": {
+
+	}
+}

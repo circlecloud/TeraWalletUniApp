@@ -1,29 +1,34 @@
 <template>
 	<view>
-		<uni-list><uni-list-item :thumb="url" show-arrow="false" title="TeraWallet" note="by MiaoWoo" /></uni-list>
-		<view class="uni-form-item uni-column">
-			<view class="title">账户公钥 (输入后下滑即可查看详情)</view>
-			<input class="uni-input" v-model="publicKey" placeholder="也可输入ID 会自动转换为公钥" />
+		<uni-list><uni-list-item :thumb="userInfo.avatarUrl" show-arrow="false" :title="userInfo.nickName" note="TeraWallet by MiaoWoo" /></uni-list>
+		<button v-if="!isLogin" type="primary" open-type="getUserInfo" @getuserinfo="onLogin">{{ i18n.wechatLogin }}</button>
+		<view>
+			<view class="uni-form-item uni-column">
+				<view class="title">{{ i18n.title }}</view>
+				<input class="uni-input" v-model="publicKey" :placeholder="i18n.placeholder" />
+			</view>
+			<uni-list>
+				<uni-list-item
+					show-arrow:
+					false
+					:show-badge="account.Latest.Amount > 0"
+					:badge-type="getBadgeTypeByTime(account.Latest)"
+					:badge-text="getBadgeTextByTime(account.Latest)"
+					:title="account.Num"
+					:note="formatNote(account)"
+					:key="key"
+					v-for="(account, key) in accounts"
+				/>
+			</uni-list>
 		</view>
-		<uni-list>
-			<uni-list-item
-				show-arrow:
-				false
-				:show-badge="account.Latest.Amount > 0"
-				:badge-type="getBadgeTypeByTime(account.Latest)"
-				:badge-text="getBadgeTextByTime(account.Latest)"
-				:title="account.Num"
-				:note="formatNote(account)"
-				:key="key"
-				v-for="(account, key) in accounts"
-			/>
-		</uni-list>
 	</view>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 import { uniList, uniListItem, uniNoticeBar } from '@dcloudio/uni-ui';
 import timeKit from '@/kits/time-kit.js';
+import context from '@/store/enum.js';
 import rpc from '@/rpc/index.js';
 
 const PublicKey = 'PublicKey';
@@ -34,6 +39,12 @@ export default {
 		uniListItem,
 		uniNoticeBar
 	},
+	computed: {
+		...mapState(['isLogin', 'userInfo']),
+		i18n() {
+			return this.$t('my');
+		}
+	},
 	data() {
 		return {
 			notify: '',
@@ -43,8 +54,12 @@ export default {
 		};
 	},
 	async onLoad() {
-		this.publicKey = uni.getStorageSync(PublicKey);
+		this.publicKey = uni.getStorageSync(context.PUBLIC_KEY);
+		console.log(this.isLogin);
 		uni.startPullDownRefresh();
+	},
+	async onShow() {
+		uni.setNavigationBarTitle({ title: this.$t('my.navigationBarTitle') });
 	},
 	async onPullDownRefresh() {
 		if (!this.publicKey) {
@@ -56,11 +71,27 @@ export default {
 			mask: true
 		});
 		await this.checkPublicKey();
-		uni.setStorageSync(PublicKey, this.publicKey);
+		uni.setStorageSync(context.PUBLIC_KEY, this.publicKey);
 		await this.getAccountsList();
 		this.stopLoading();
 	},
 	methods: {
+		...mapMutations(['login']),
+		onLogin: async function(result) {
+			if (result.detail.errMsg == 'getUserInfo:ok') {
+				this.login(result.detail.userInfo);
+				uni.setTabBarItem({
+					index: 0,
+					text: this.$t('index.tabBarTitle')
+				});
+				//uni.setTabBarItem({ index: 1, text: this.$t('index.tabBarTitle') });
+				uni.setTabBarItem({
+					index: 2,
+					text: this.$t('my.tabBarTitle')
+				});
+			}
+			console.log(result);
+		},
 		getAccountsList: async function() {
 			var accounts = await rpc.GetAccountListByKey(this.publicKey);
 			if (!accounts.length) {

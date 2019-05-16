@@ -8,6 +8,15 @@ export default {
 				traceUser: true
 			});
 		}
+		uni.setTabBarItem({
+			index: 0,
+			text: this.$t('index.tabBarTitle')
+		});
+		//uni.setTabBarItem({ index: 1, text: this.$t('index.tabBarTitle') });
+		uni.setTabBarItem({
+			index: 2,
+			text: this.$t('my.tabBarTitle')
+		});
 	}
 };
 </script>

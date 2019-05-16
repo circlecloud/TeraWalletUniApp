@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<uni-notice-bar v-if="notify.length != 0" show-icon="true" show-close="true" single="true" :scrollable="notify.length > 25" :text="notify"></uni-notice-bar>
-		<uni-list><uni-list-item :thumb="url" :show-arrow="false" title="交易所价格" :note="'更新时间: ' + updateTime" /></uni-list>
+		<uni-list><uni-list-item :thumb="url" :show-arrow="false" :title="i18n.exchange" :note="i18n.updateTime + ': ' + updateTime" /></uni-list>
 		<uni-list>
 			<uni-list-item
 				:show-arrow="false"
 				:show-badge="true"
 				:badge-text="transaction.LatestCNYT"
 				:title="transaction.Market"
-				:note="'原始价格: 1 ' + transaction.From + ' = ' + transaction.Latest + ' ' + transaction.To"
+				:note="i18n.origin + ': 1 ' + transaction.From + ' = ' + transaction.Latest + ' ' + transaction.To"
 				:key="key"
 				v-for="(transaction, key) in transactions"
 			/>
@@ -19,10 +19,8 @@
 <script>
 import { uniList, uniListItem, uniNoticeBar } from '@dcloudio/uni-ui';
 import timeKit from '@/kits/time-kit.js';
-import rpc from '@/rpc/index.js';
 import context from '@/store/enum.js';
-
-var MAX_VALUE = 1e9;
+import rpc from '@/rpc/index.js';
 
 export default {
 	components: {
@@ -30,19 +28,32 @@ export default {
 		uniListItem,
 		uniNoticeBar
 	},
+	computed: {
+		i18n() {
+			return this.$t('index');
+		}
+	},
 	data() {
 		return {
 			notify: '',
 			url: '/static/images/tera.png',
 			updateTime: new Date().toLocaleString(),
-			pairs: [],
+			pairs: {},
 			transactions: []
 		};
 	},
 	async onLoad() {
 		rpc.request('notify').then(result => (this.notify = result.data));
 		uni.clearStorageSync(context.TRANSACTION_TICKER);
+		console.log(
+			await uni.getProvider({
+				service: 'oauth'
+			})
+		);
 		uni.startPullDownRefresh();
+	},
+	async onShow() {
+		uni.setNavigationBarTitle({ title: this.$t('index.navigationBarTitle') });
 	},
 	async onPullDownRefresh() {
 		try {

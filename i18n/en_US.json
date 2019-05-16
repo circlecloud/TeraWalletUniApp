@@ -1,0 +1,20 @@
+{
+	"index": {
+		"navigationBarTitle": "Tera Manager",
+		"tabBarTitle": "Home",
+		"origin": "Origin Price",
+		"exchange": "Exchange Price",
+		"updateTime": "Update Time"
+	},
+	"my": {
+		"navigationBarTitle": "Personal Center",
+		"tabBarTitle": "My",
+		"wechatLogin": "Wechat Authorized Login",
+		"noLogin": "Not Logged",
+		"title": "Account Public Key (sliding down to see details)",
+		"placeholder": "You can also enter an ID that automatically converts to a public key."
+	},
+	"common": {
+
+	}
+}
