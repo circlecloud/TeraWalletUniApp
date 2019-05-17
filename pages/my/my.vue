@@ -1,149 +1,128 @@
 <template>
-	<view>
-		<uni-list><uni-list-item :thumb="userInfo.avatarUrl" show-arrow="false" :title="userInfo.nickName" note="TeraWallet by MiaoWoo" /></uni-list>
-		<button v-if="!isLogin" type="primary" open-type="getUserInfo" @getuserinfo="onLogin">{{ i18n.wechatLogin }}</button>
-		<view>
-			<view class="uni-form-item uni-column">
-				<view class="title">{{ i18n.title }}</view>
-				<input class="uni-input" v-model="publicKey" :placeholder="i18n.placeholder" />
+	<view class="page">
+		<view class="uni-header-logo">
+			<view class="uni-list">
+				<view class="uni-list-cell" hover-class="uni-list-cell-hover">
+					<view class="uni-media-list">
+						<view class="uni-media-list-logo">
+							<image :src="userInfo.avatarUrl"></image>
+						</view>
+						<view class="uni-media-list-body">
+							<view class="uni-media-list-text-top">{{userInfo.nickName}}</view>
+							<view class="uni-media-list-text-bottom uni-ellipsis">TeraWallet by MiaoWoo</view>
+						</view>
+						<button v-if="!isLogin" type="primary" class="login-btn" open-type="getUserInfo" @getuserinfo="onLogin">{{ i18n.wechatLogin }}</button>
+						<button v-if="isLogin" type="warn" class="login-btn" @click="onLogout">{{ i18n.wechatLogout }}</button>
+					</view>
+				</view>
 			</view>
-			<uni-list>
-				<uni-list-item
-					show-arrow:
-					false
-					:show-badge="account.Latest.Amount > 0"
-					:badge-type="getBadgeTypeByTime(account.Latest)"
-					:badge-text="getBadgeTextByTime(account.Latest)"
-					:title="account.Num"
-					:note="formatNote(account)"
-					:key="key"
-					v-for="(account, key) in accounts"
-				/>
-			</uni-list>
+		</view>
+		<view class="uni-card" v-for="(list,index) in lists" :key="index">
+			<view class="uni-list">
+				<view class="uni-list-cell uni-collapse">
+					<view class="uni-list-cell-navigate" hover-class="uni-list-cell-hover" :class="[list.open ? 'uni-active' : '',list.pages ? 'uni-navigate-bottom' : 'uni-navigate-right']"
+					 @click="triggerCollapse(index)">
+						{{list.name}}
+					</view>
+					<view class="uni-list uni-collapse" v-if="list.pages" :class="list.open ? 'uni-active' : ''">
+						<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item,key) in list.pages" :key="key" @click="goDetailPage(item)">
+							<view class="uni-list-cell-navigate uni-navigate-right"> {{item.name ? item.name : item}} </view>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
-import { uniList, uniListItem, uniNoticeBar } from '@dcloudio/uni-ui';
-import timeKit from '@/kits/time-kit.js';
-import context from '@/store/enum.js';
-import rpc from '@/rpc/index.js';
-
-const PublicKey = 'PublicKey';
-
-export default {
-	components: {
+	import {
+		mapState,
+		mapActions
+	} from 'vuex';
+	import {
 		uniList,
 		uniListItem,
 		uniNoticeBar
-	},
-	computed: {
-		...mapState(['isLogin', 'userInfo']),
-		i18n() {
-			return this.$t('my');
-		}
-	},
-	data() {
-		return {
-			notify: '',
-			publicKey: '',
-			url: '/static/images/tera.png',
-			accounts: []
-		};
-	},
-	async onLoad() {
-		this.publicKey = uni.getStorageSync(context.PUBLIC_KEY);
-		console.log(this.isLogin);
-		uni.startPullDownRefresh();
-	},
-	async onShow() {
-		uni.setNavigationBarTitle({ title: this.$t('my.navigationBarTitle') });
-	},
-	async onPullDownRefresh() {
-		if (!this.publicKey) {
-			this.stopLoading();
-			return;
-		}
-		uni.showLoading({
-			title: '数据加载中...',
-			mask: true
-		});
-		await this.checkPublicKey();
-		uni.setStorageSync(context.PUBLIC_KEY, this.publicKey);
-		await this.getAccountsList();
-		this.stopLoading();
-	},
-	methods: {
-		...mapMutations(['login']),
-		onLogin: async function(result) {
-			if (result.detail.errMsg == 'getUserInfo:ok') {
-				this.login(result.detail.userInfo);
-				uni.setTabBarItem({
-					index: 0,
-					text: this.$t('index.tabBarTitle')
-				});
-				//uni.setTabBarItem({ index: 1, text: this.$t('index.tabBarTitle') });
-				uni.setTabBarItem({
-					index: 2,
-					text: this.$t('my.tabBarTitle')
-				});
-			}
-			console.log(result);
+	} from '@dcloudio/uni-ui';
+	import timeKit from '@/kits/time-kit.js';
+	import context from '@/store/enum.js';
+	import rpc from '@/rpc/index.js';
+
+	const PAGE_NAME = 'my';
+
+	export default {
+		components: {
+			uniList,
+			uniListItem,
+			uniNoticeBar
 		},
-		getAccountsList: async function() {
-			var accounts = await rpc.GetAccountListByKey(this.publicKey);
-			if (!accounts.length) {
-				uni.showModal({
-					title: '错误',
-					content: '无效的账户公钥或该公钥下无账户!'
-				});
-				this.stopLoading();
-				return;
+		computed: {
+			...mapState(['isLogin', 'userInfo']),
+			i18n() {
+				return this.$t(PAGE_NAME);
 			}
-			this.accounts = accounts;
 		},
-		checkPublicKey: async function() {
-			if (!isNaN(Number(this.publicKey))) {
-				var balance = await rpc.GetBalance(this.publicKey);
-				if (!balance.result) {
-					uni.showModal({
-						title: '错误',
-						content: '无效的账户ID'
+		async onShow() {
+			uni.setNavigationBarTitle({
+				title: this.$t(PAGE_NAME + '.navigationBarTitle')
+			});
+		},
+		data() {
+			return {
+				lists: []
+			};
+		},
+		onLoad() {
+			this.lists.push({
+				name: this.i18n.setting,
+				url: 'account'
+			})
+		},
+		methods: {
+			...mapActions(['login', 'logout']),
+			onLogin: async function(result) {
+				if (result.detail.errMsg == 'getUserInfo:ok') {
+					this.login({
+						vueInstance: this,
+						userInfo: result.detail.userInfo
 					});
-					this.stopLoading();
+				}
+				console.log(result);
+			},
+			onLogout: function() {
+				this.logout();
+			},
+			triggerCollapse(e) {
+				if (!this.lists[e].pages) {
+					this.goDetailPage(this.lists[e].url);
 					return;
 				}
-				this.publicKey = balance.PubKey;
+				for (var i = 0; i < this.lists.length; ++i) {
+					if (e === i) {
+						this.lists[i].open = !this.lists[e].open;
+					} else {
+						this.lists[i].open = false;
+					}
+				}
+			},
+			goDetailPage(e) {
+				let path = e.url ? e.url : e;
+				uni.navigateTo({
+					url: '/pages/my/' + path
+				});
+				return false;
 			}
-		},
-		stopLoading: function() {
-			uni.hideLoading();
-			uni.stopPullDownRefresh();
-		},
-		getBadgeTypeByTime: function(Latest) {
-			if (Latest.Time > 18000) {
-				return 'error';
-			} else if (Latest.Time > 10800) {
-				return 'warning';
-			} else if (Latest.Amount > 0) {
-				return 'success';
-			} else {
-				return 'default';
-			}
-		},
-		getBadgeTextByTime: function(Latest) {
-			return this.formatSecond(Latest.Time) + '前';
-		},
-		formatNote: function(account) {
-			return '名称: ' + account.Name + '\n余额: ' + account.Amount;
-		},
-		formatSecond: function(time) {
-			return timeKit.formatShortTime(time, 2);
 		}
-	}
-};
+	};
 </script>
 
-<style></style>
+<style>
+	.login-btn {
+		position: none;
+		padding: 0 1.34em;
+		background-color: transparent;
+		font-size: 13px;
+		line-height: 3.5;
+	}
+</style>

@@ -1,19 +1,16 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 
-import zhCN from './zh_CN'
-import enUS from './en_US'
-
 Vue.use(VueI18n)
 
 var messages = {
-	'en_US': enUS,
-	'zh_CN': zhCN
+	'en_US': require('./en_US'),
+	'zh_CN': require('./zh_CN')
 }
 
 const i18n = new VueI18n({
 	locale: 'en_US',
-	fallbackLocale: 'zh_CN',
+	fallbackLocale: 'en_US',
 	messages
 })
 

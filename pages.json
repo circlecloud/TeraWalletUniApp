@@ -11,11 +11,13 @@
 				"enablePullDownRefresh": true
 			}
 		}, {
-			"path": "pages/my/my",
+			"path": "pages/account/account",
 			"style": {
-				"navigationBarTitleText": "个人中心",
 				"enablePullDownRefresh": true
 			}
+		}, {
+			"path": "pages/my/my",
+			"style": {}
 		}, {
 			"path": "pages/my/account",
 			"style": {}
@@ -39,9 +41,15 @@
 			},
 			{
 				"pagePath": "pages/info/info",
-				"text": "仪表盘",
-				"iconPath": "static/images/dashboard.png",
-				"selectedIconPath": "static/images/dashboard_select.png"
+				"text": "看板",
+				"iconPath": "static/images/kanban.png",
+				"selectedIconPath": "static/images/kanban_select.png"
+			},
+			{
+				"pagePath": "pages/account/account",
+				"text": "账户",
+				"iconPath": "static/images/account.png",
+				"selectedIconPath": "static/images/account_select.png"
 			},
 			{
 				"pagePath": "pages/my/my",

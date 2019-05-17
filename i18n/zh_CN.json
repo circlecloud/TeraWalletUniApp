@@ -4,17 +4,40 @@
 		"tabBarTitle": "首页",
 		"origin": "原始价格",
 		"exchange": "交易所价格",
-		"updateTime": "更新时间"
+		"updateTime": "更新时间",
+		"initPair": "初始化交易对...",
+		"loadingExchange": "查询交易所信息...",
+		"loadingError": "数据获取失败!"
+	},
+	"kanban": {
+		"navigationBarTitle": "仪表盘",
+		"tabBarTitle": "看板",
+		"statistics": "Tera信息统计",
+		"supplyNumber": "已流通数量",
+		"supplyLatest": "当前块收益",
+		"supplyPercent": "已流通百分比"
+	},
+	"account": {
+		"navigationBarTitle": "账户查询",
+		"tabBarTitle": "账户",
+		"title": "账户公钥 (输入后下滑即可查看详情)",
+		"placeholder": "也可输入ID 会自动转换为公钥"
 	},
 	"my": {
 		"navigationBarTitle": "个人中心",
 		"tabBarTitle": "我的",
 		"wechatLogin": "微信授权登录",
+		"wechatLogout": "退出登录",
 		"noLogin": "未登录",
-		"title": "账户公钥 (输入后下滑即可查看详情)",
-		"placeholder": "也可输入ID 会自动转换为公钥"
+		"setting": "设置账户信息"
 	},
 	"common": {
-
+		"inDevelopment": "开发中...",
+		"loading": "加载中...",
+		"initiate": "初始化",
+		"pair": "交易对",
+		"exchange": "交易所",
+		"from": "来自",
+		"loadingError": ""
 	}
 }

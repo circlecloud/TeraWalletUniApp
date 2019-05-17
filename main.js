@@ -6,7 +6,7 @@ import store from './store'
 Vue.prototype._i18n = i18n
 Vue.prototype.$store = store
 
-store.commit('setI18n', i18n);
+store.dispatch('setI18n', i18n);
 
 Vue.config.productionTip = false
 

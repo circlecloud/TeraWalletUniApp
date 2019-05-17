@@ -4,17 +4,38 @@
 		"tabBarTitle": "Home",
 		"origin": "Origin Price",
 		"exchange": "Exchange Price",
-		"updateTime": "Update Time"
+		"updateTime": "Update Time",
+		"initPair": "Init Pair...",
+		"loadingExchange": "Loading Exchange...",
+		"loadingError": "loading Error!"
+	},
+	"kanban": {
+		"navigationBarTitle": "Dashboard",
+		"tabBarTitle": "KanBan",
+		"statistics": "TeraStatistics",
+		"supplyNumber": "SupplyNumber",
+		"supplyLatest": "SupplyLatest",
+		"supplyPercent": "SupplyPercent"
+	},
+	"account": {
+		"navigationBarTitle": "Account",
+		"tabBarTitle": "Account",
+		"title": "Account Public Key (sliding down to see details)",
+		"placeholder": "You can also enter an ID that automatically converts to a public key."
 	},
 	"my": {
 		"navigationBarTitle": "Personal Center",
 		"tabBarTitle": "My",
 		"wechatLogin": "Wechat Authorized Login",
+		"wechatLogout": "Logout",
 		"noLogin": "Not Logged",
-		"title": "Account Public Key (sliding down to see details)",
-		"placeholder": "You can also enter an ID that automatically converts to a public key."
+		"setting": "Setting Account"
 	},
 	"common": {
-
+		"inDevelopment": "In Development...",
+		"loading": "Loading...",
+		"pair": "Pair",
+		"exchange": "Exchange",
+		"from": "From"
 	}
 }
