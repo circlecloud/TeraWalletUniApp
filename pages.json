@@ -6,7 +6,7 @@
 				"enablePullDownRefresh": true
 			}
 		}, {
-			"path": "pages/info/info",
+			"path": "pages/kanban/kanban",
 			"style": {
 				"enablePullDownRefresh": true
 			}
@@ -40,7 +40,7 @@
 				"selectedIconPath": "static/images/home_select.png"
 			},
 			{
-				"pagePath": "pages/info/info",
+				"pagePath": "pages/kanban/kanban",
 				"text": "看板",
 				"iconPath": "static/images/kanban.png",
 				"selectedIconPath": "static/images/kanban_select.png"

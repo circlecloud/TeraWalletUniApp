@@ -1,4 +1,5 @@
 {
+	"env": "CHINESE",
 	"index": {
 		"navigationBarTitle": "泰瑞管家",
 		"tabBarTitle": "首页",
@@ -37,7 +38,6 @@
 		"initiate": "初始化",
 		"pair": "交易对",
 		"exchange": "交易所",
-		"from": "来自",
-		"loadingError": ""
+		"from": "来自"
 	}
 }

@@ -1,3 +1,5 @@
+import rpc from '@/rpc';
+
 var actions = {
 	setI18n({
 		commit,
@@ -11,8 +13,13 @@ var actions = {
 		commit,
 		state,
 		dispatch
+	}, {
+		vueInstance
 	}) {
 		commit('logout');
+		dispatch('changeLanguage', {
+			vueInstance
+		})
 		commit('init');
 	},
 	login({
@@ -24,13 +31,26 @@ var actions = {
 		userInfo
 	}) {
 		commit('login', userInfo);
-		state.i18n.locale = userInfo.language;
-		dispatch('changeLanguage', vueInstance)
+		dispatch('changeLanguage', {
+			vueInstance,
+			locale: userInfo.language
+		})
+	},
+	changeNotidy({
+		state
+	}) {
+		rpc.request('notify', state.i18n.messages[state.i18n.locale].env).then(result => (state.notify = result.data));
 	},
 	changeLanguage({
 		commit,
-		state
-	}, vueInstance) {
+		state,
+		dispatch
+	}, {
+		vueInstance,
+		locale
+	}) {
+		state.i18n.locale = locale || state.i18n.fallbackLocale;
+		dispatch('changeNotidy');
 		uni.setTabBarItem({
 			index: 0,
 			text: vueInstance.$t('index.tabBarTitle')
